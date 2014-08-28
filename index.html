@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <title>Quizzy by JT</title>
+      <meta name="description" content="">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+      <script src="http://underscorejs.org/underscore-min.js"></script>
+      <script src="main.js"></script>
+      <!-- <link rel="stylesheet" href="style.css"> -->
+    </head>
+    <body>
+      <div id="quiz-app"></div>
+      <script type="text/template" id="template-question">
+      	<div>
+      		<h2><%= question %></h2>
+      		<input type="text">
+      		<input type="submit">
+      	</div>
+      </script>
+      <script>
+      	var myFancyQuizData = {
+      		quizTitle: "This is Way's Fancy Quiz",
+      		questions: [
+      			{
+      				question: "What is the capital of Texas?",
+      				answer: "Austin"
+      			},
+      			{
+      				question: "What is Way's favorite color?",
+      				answer: "green"
+      			},
+      			{
+      				question: "What is the greatest language?",
+      				answer: "JavaScript"
+      			}
+      		]
+      	};
+      	
+      	Quizzy.start('#quiz-app', myFancyQuizData);
+      </script>
+    </body>
+</html>
