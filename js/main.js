@@ -4,11 +4,17 @@ var Quizzy = (function() {
 			quizData,
 			questionUp = 0,
 			score = 0,
+			highScore = 0,
 			questionCount = 0,
+			username = "Joe",
+			user = {
+				username: highScore
+			},
 			QuizController = {
 				checkAnswer: function(input, questionModel) {
 					$('#quiz-app')
-						.append('<p><input type="button" value="Next Question" class="btn btn-md btn-primary next-question">');
+						.append('<p><input type="button" value="Next Question" class="btn btn-md btn-primary next-question">')
+						.append('<FORM><INPUT TYPE="button" class="btn btn-lg btn-info" onClick="history.go(0)" VALUE="Start Over"></FORM>');
 					if (input == questionModel.answer) {
 						// questionCount++;
 						score++;
@@ -25,14 +31,22 @@ var Quizzy = (function() {
 					});
 					console.log("questionCount", questionCount);
 					if (questionCount === myFancyQuizData.questions.length) {
+						if (score > localStorage[username]){
+							localStorage[username]=score;
+						}
+						console.log("LS check", localStorage[username]);
 						$('#quiz-app')
 							.empty()
 							.append('<h1>Game over. Your score is ' + score + ' out of ' + questionCount + '.</h1>')
-							.append('<FORM><INPUT TYPE="button" class="btn btn-lg btn-info" onClick="history.go(0)" VALUE="Start Over"></FORM>');
+							.append('<h2>' + username + '\'s high score: ' + localStorage[username] + '</h2>')
+							.append('<FORM><INPUT TYPE="button" class="btn btn-xs" onClick="history.go(0)" VALUE="Start Over"></FORM>');
 					}
 				},
-				checkScore: function(){
-					return score;
+				lookupUser: function(){
+					$('#quiz-app')
+						.empty()
+						.append('<h1 class="quiz-title">' + myFancyQuizData.quizTitle + '</h1>')
+						.append('<h2 class="user-score">' + username + '\'s high score: ' + highScore +'</h2>');
 				}
 			};
 
@@ -44,10 +58,10 @@ var Quizzy = (function() {
 		this.view = new QuestionView(this);
 	}
 
-	function ScoreModel(scoreData) {
-		this.score 			= scoreData.correct;
-		this.totalScore = myFancyQuizData.questions.length;
-	}
+	// function ScoreModel(scoreData) {
+	// 	this.score 			= scoreData.correct;
+	// 	this.totalScore = myFancyQuizData.questions.length;
+	// }
 
 	function QuestionView(questionModel) {
 		var me     = this;
@@ -71,28 +85,28 @@ var Quizzy = (function() {
 		$quizContainer.append($view);
 	}
 
-	function ScoreView(scoreModel) {
+	function LoginModel(loginData) {
+		this.username = username
+	}
+
+	function LoginView(loginModel) {
 		var me = this;
-		this.model = scoreModel;
-		this.template = ('#template-score').html();
+		this.model = loginModel;
+		this.template = $('template-login').html();
 
 		var preppedTemplate = _.template(this.template);
 		var compiledHtml = preppedTemplate({
-			score: this.model.score
+			// username: 
 		});
-		var $view = $(compiledHtml);
 
-		$quizContainer.append($view);
-	}
-
-	function disableFunction() {
-	    document.getElementById("btn1").disabled = 'true';
 	}
 
 	function startApplication(selector, quizData) {
 		$quizContainer = $(selector);
+		var playerHighScore = localStorage[username];
 
-		$quizContainer.append('<h1 class="quiz-title">' + quizData.quizTitle + '</h1>');
+		$quizContainer.append('<h1 class="quiz-title">' + quizData.quizTitle + '</h1>')
+			.append('<h2 class="user-score">' + username + '\'s high score: ' + playerHighScore +'</h2>');
 
 		var model = new QuestionModel(quizData.questions[questionUp]);
 		questionModels.push(model);
@@ -101,8 +115,10 @@ var Quizzy = (function() {
 
 	function nextQuestion(selector, quizData) {
 		$quizContainer = $(selector);
+		var playerHighScore = localStorage[username];
 
-		$quizContainer.append('<h1 class="quiz-title">' + quizData.quizTitle + '</h1>');
+		$quizContainer.append('<h1 class="quiz-title">' + quizData.quizTitle + '</h1>')
+			.append('<h2 class="user-score">' + username + '\'s high score: ' + playerHighScore +'</h2>');
 
 		questionUp += 1;
 		var model = QuestionModel(quizData.questions[questionUp]);
@@ -112,4 +128,13 @@ var Quizzy = (function() {
 	return {
 		start: startApplication
 	};
+
+	function LoadMyJs(scriptName) {
+   var docHeadObj = document.getElementsByTagName("head")[0];
+   var dynamicScript = document.createElement("script");
+   dynamicScript.type = "text/javascript";
+   dynamicScript.src = scriptName;
+   docHeadObj.appendChild(newScript);
+	}
+
 })();
