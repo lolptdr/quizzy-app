@@ -7,22 +7,28 @@ var Quizzy = (function() {
 			questionCount = 0,
 			QuizController = {
 				checkAnswer: function(input, questionModel) {
+					$('#quiz-app')
+						.append('<p><input type="button" value="Next Question" class="btn btn-md btn-primary next-question">');
 					if (input == questionModel.answer) {
-						questionCount++;
+						// questionCount++;
 						score++;
-						 $('.submit-button').after($('<p><input type="button" value="Next Question" class="btn btn-md btn-primary next-question">'));
-						// console.log('Correct! Current score: ' + score + ' out of ' + myFancyQuizData.questions.length);
-						$('#quiz-app').append('Correct! Current score: ' + score + ' out of ' + myFancyQuizData.questions.length);
-						$(".next-question").click(function() {
-							$("#quiz-app").empty();
-							nextQuestion('#quiz-app', myFancyQuizData);
-						});
-						if (questionCount === myFancyQuizData.questions.length) {
-							alert('Game over. Your score is ' + score + ' out of ' + questionCount + '.');
-							$("#quiz-app").empty();
-						}
+							$('#quiz-app')
+								.append('Correct! Current score: ' + score + ' out of ' + myFancyQuizData.questions.length);
 					} else {
-						alert('Wrong. Try again.');
+						$('#quiz-app')
+							.append('Wrong... ' + score + ' out of ' + myFancyQuizData.questions.length);
+					}
+					questionCount++;
+					$('.next-question').click(function() {
+						$('#quiz-app').empty();
+						nextQuestion('#quiz-app', myFancyQuizData);
+					});
+					console.log("questionCount", questionCount);
+					if (questionCount === myFancyQuizData.questions.length) {
+						$('#quiz-app')
+							.empty()
+							.append('<h1>Game over. Your score is ' + score + ' out of ' + questionCount + '.</h1>')
+							.append('<FORM><INPUT TYPE="button" class="btn btn-lg btn-info" onClick="history.go(0)" VALUE="Start Over"></FORM>');
 					}
 				},
 				checkScore: function(){
@@ -79,13 +85,18 @@ var Quizzy = (function() {
 		$quizContainer.append($view);
 	}
 
+	function disableFunction() {
+	    document.getElementById("btn1").disabled = 'true';
+	}
+
 	function startApplication(selector, quizData) {
 		$quizContainer = $(selector);
 
 		$quizContainer.append('<h1 class="quiz-title">' + quizData.quizTitle + '</h1>');
 
 		var model = new QuestionModel(quizData.questions[questionUp]);
-		questionModels.push(model);	
+		questionModels.push(model);
+
 	}
 
 	function nextQuestion(selector, quizData) {

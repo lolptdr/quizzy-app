@@ -45,3 +45,7 @@ button{
   margin: 0 auto;
   text-align: center;
 }
+
+.submit-button {
+  background-color: #46c582; /* Hovering changes color to Bootstrap default */
+}
