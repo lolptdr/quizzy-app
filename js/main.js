@@ -1,5 +1,6 @@
 var Quizzy = (function() {
 	var $quizContainer,
+			questionModels = [],
 			quizData,
 			questionUp = 0,
 			score = 0,
@@ -9,11 +10,16 @@ var Quizzy = (function() {
 					if (input == questionModel.answer) {
 						questionCount++;
 						score++;
-						 $('.submit-button').after($('<p><input type="button" value="Next Question" class="btn btn-lg btn-success">'));
-						alert('Correct! Current score: ' + score + ' out of ' + myFancyQuizData.questions.length);
-						$(".next-question")
+						 $('.submit-button').after($('<p><input type="button" value="Next Question" class="btn btn-md btn-primary next-question">'));
+						// console.log('Correct! Current score: ' + score + ' out of ' + myFancyQuizData.questions.length);
+						$('#quiz-app').append('Correct! Current score: ' + score + ' out of ' + myFancyQuizData.questions.length);
+						$(".next-question").click(function() {
+							$("#quiz-app").empty();
+							nextQuestion('#quiz-app', myFancyQuizData);
+						});
 						if (questionCount === myFancyQuizData.questions.length) {
 							alert('Game over. Your score is ' + score + ' out of ' + questionCount + '.');
+							$("#quiz-app").empty();
 						}
 					} else {
 						alert('Wrong. Try again.');
@@ -78,15 +84,18 @@ var Quizzy = (function() {
 
 		$quizContainer.append('<h1 class="quiz-title">' + quizData.quizTitle + '</h1>');
 
-		var questionModels = [];
-		if (questionUp === 0) {
-			var model = new QuestionModel(quizData.questions[questionUp]);
-			questionModels.push(model);	
-		} else {
-				questionUp += 1;
-				var model = new QuestionModel(quizData.questions[questionUp]);
-				questionModels.push(model);
-		}
+		var model = new QuestionModel(quizData.questions[questionUp]);
+		questionModels.push(model);	
+	}
+
+	function nextQuestion(selector, quizData) {
+		$quizContainer = $(selector);
+
+		$quizContainer.append('<h1 class="quiz-title">' + quizData.quizTitle + '</h1>');
+
+		questionUp += 1;
+		var model = QuestionModel(quizData.questions[questionUp]);
+		questionModels.push(model);	
 	}
 
 	return {
