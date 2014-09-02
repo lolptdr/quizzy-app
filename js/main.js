@@ -18,28 +18,28 @@ var Quizzy = (function() {
 				checkAnswer: function(input, questionModel) {
 					$('#quiz-app').append('<p><input type="button" value="Next Question" class="btn btn-md btn-primary next-question">');
 					if (input == questionModel.answer) {
-						// localStorage[questionCount] = score;
-						// console.log("parse", parseInt(localStorage[questionCount]));
+						// Assign correct answers
 						correct = parseInt(localStorage[questionCount]) + 1;
 						localStorage[questionCount] = correct;
+						// Assign total answered
 						totalAnswered = parseInt(localStorage["Total" + questionCount]) + 1;
 						localStorage["Total" + questionCount] = totalAnswered;
-						console.log("totalAnswered", totalAnswered);
+						// Assign current score
 						score++;
 						localStorage[username] = score;
-						console.log("correct", correct);
-						console.log("wrong: ", wrong);
+
 						$('#quiz-app')
 							.append('Correct! Current score: ' + score + ' out of ' + myFancyQuizData.questions.length)
 							.append('<br>Question #' + questionCount + ' answered correctly of all users: ' + (correct/totalAnswered * 100).toFixed(2) + '%')
 							.append('<br>Total times this question has been answered: ' + totalAnswered);
 					} else {
 						wrong++;
+						// Assign correct answers (notice not increment for wrong answer!)
 						correct = parseInt(localStorage[questionCount]);
+						// Assign total answered (in case they miss the first question)
 						totalAnswered = parseInt(localStorage["Total" + questionCount]) + 1;
 						localStorage["Total" + questionCount] = totalAnswered;
-						console.log("correct: ", correct);
-						console.log("wrong: ", wrong);
+
 						$('#quiz-app')
 							.append('Wrong... Current Score: ' + score + ' out of ' + myFancyQuizData.questions.length)
 							.append('<br>Question #' + questionCount + ' answered correctly of all users: ' + (correct/totalAnswered * 100).toFixed(2) + '%')
@@ -59,7 +59,7 @@ var Quizzy = (function() {
 						if (score > localStorage[username]){
 							localStorage[username] = score;
 						}
-						// console.log("LS check", localStorage[username]);
+
 						$('#quiz-app')
 							.empty()
 							.append('<h1>Game over. Your score is ' + score + ' out of ' + questionCount + '.</h1>')
@@ -123,7 +123,7 @@ var Quizzy = (function() {
 		$quizContainer.append($view);
 	}
 
-
+	// This function kicks off the game
 	function startLogin(selector, myFancyQuizData) {
 		quizData = myFancyQuizData;
 		$quizContainer = $(selector);
