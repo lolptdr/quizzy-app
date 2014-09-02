@@ -4,22 +4,46 @@ var Quizzy = (function() {
 			quizData,
 			questionUp = 0,
 			score = 0,
+			wrong = 0,
+			correct = 0,
 			highScore = 0,
-			questionCount = 0,
+			questionCount = 1,
+			totalAnswered = 0,
 			username = '',
 			user = {
 				username: highScore
-			},
+			};
+
 			QuizController = {
 				checkAnswer: function(input, questionModel) {
 					$('#quiz-app').append('<p><input type="button" value="Next Question" class="btn btn-md btn-primary next-question">');
 					if (input == questionModel.answer) {
-						// questionCount++;
+						// localStorage[questionCount] = score;
+						// console.log("parse", parseInt(localStorage[questionCount]));
+						correct = parseInt(localStorage[questionCount]) + 1;
+						localStorage[questionCount] = correct;
+						totalAnswered = parseInt(localStorage["Total" + questionCount]) + 1;
+						localStorage["Total" + questionCount] = totalAnswered;
+						console.log("totalAnswered", totalAnswered);
 						score++;
 						localStorage[username] = score;
-						$('#quiz-app').append('Correct! Current score: ' + score + ' out of ' + myFancyQuizData.questions.length);
+						console.log("correct", correct);
+						console.log("wrong: ", wrong);
+						$('#quiz-app')
+							.append('Correct! Current score: ' + score + ' out of ' + myFancyQuizData.questions.length)
+							.append('<br>Question #' + questionCount + ' answered correctly of all users: ' + (correct/totalAnswered * 100).toFixed(2) + '%')
+							.append('<br>Total times this question has been answered: ' + totalAnswered);
 					} else {
-						$('#quiz-app').append('Wrong... ' + score + ' out of ' + myFancyQuizData.questions.length);
+						wrong++;
+						correct = parseInt(localStorage[questionCount]);
+						totalAnswered = parseInt(localStorage["Total" + questionCount]) + 1;
+						localStorage["Total" + questionCount] = totalAnswered;
+						console.log("correct: ", correct);
+						console.log("wrong: ", wrong);
+						$('#quiz-app')
+							.append('Wrong... Current Score: ' + score + ' out of ' + myFancyQuizData.questions.length)
+							.append('<br>Question #' + questionCount + ' answered correctly of all users: ' + (correct/totalAnswered * 100).toFixed(2) + '%')
+							.append('<br>Total times this question has been answered: ' + totalAnswered);
 					}
 					questionCount++;
 
@@ -28,8 +52,6 @@ var Quizzy = (function() {
 						nextQuestion('#quiz-app', myFancyQuizData);
 					});
 
-					console.log("questionCount", questionCount);
-
 					if (questionCount === myFancyQuizData.questions.length) {
 						console.log("score: ", score);
 						if (score === undefined) { score = 0; }
@@ -37,7 +59,7 @@ var Quizzy = (function() {
 						if (score > localStorage[username]){
 							localStorage[username] = score;
 						}
-						console.log("LS check", localStorage[username]);
+						// console.log("LS check", localStorage[username]);
 						$('#quiz-app')
 							.empty()
 							.append('<h1>Game over. Your score is ' + score + ' out of ' + questionCount + '.</h1>')
@@ -53,8 +75,7 @@ var Quizzy = (function() {
 	$(document).on('click', '.login-submit-button',function(e) {
 		e.preventDefault();
 		username = $('.login-submit').val();
-		$('.login-submit').val(''); //clear the field with '' but unnecessary moving to next view
-		console.log("explanation",username);
+		$('.login-submit').val(''); //clear the field with empty string but unnecessary since moving to next view
 		if (!localStorage[username]) {
 			localStorage[username] = score;
 		}
@@ -109,6 +130,14 @@ var Quizzy = (function() {
 		$quizContainer.append('<h1 class="quiz-title">' + quizData.quizTitle + '</h1>Presented by Joseph Tingsanchali');
 
 		LoginView();
+
+		// Prime localStorage for each questions' correct and totalAnswered variables if not created yet
+		if (!localStorage[1]) {
+			for( var i = 1; i < quizData.questions.length; i++) {
+				localStorage[i] = 0;
+				localStorage["Total" + i] = 0;
+			}
+		}
 	}
 
 
