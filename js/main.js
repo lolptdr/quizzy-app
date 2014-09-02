@@ -69,7 +69,7 @@ var Quizzy = (function() {
 				}
 			};
 
-	// event listeners
+	// Event Listeners
 
 	$(document).on('click', '.login-submit-button',function(e) {
 		e.preventDefault();
@@ -82,6 +82,8 @@ var Quizzy = (function() {
 		startApplication('#quiz-app', quizData);
 	});
 
+	// Models
+
 	function QuestionModel(questionData) {
 		this.question = questionData.question;
 		this.answer   = questionData.answer;
@@ -89,6 +91,8 @@ var Quizzy = (function() {
 		this.name     = questionData.name;
 		this.view = new QuestionView(this);
 	}
+
+	// Views
 
 	function LoginView() {
 		var me = this;
@@ -122,7 +126,8 @@ var Quizzy = (function() {
 		$quizContainer.append($view);
 	}
 
-	// This function kicks off the game
+	// Controllers and Initiators
+	// This function kicks off the quiz game
 	function startLogin(selector, myFancyQuizData) {
 		quizData = myFancyQuizData;
 		$quizContainer = $(selector);
@@ -133,8 +138,8 @@ var Quizzy = (function() {
 		// Prime localStorage for each questions' correct and totalAnswered variables if not created yet
 		if (!localStorage[1]) {
 			for( var i = 1; i < quizData.questions.length; i++) {
-				localStorage[i] = 0;
-				localStorage["Total" + i] = 0;
+				localStorage[i] = 0;						// Initiate values for correct answers
+				localStorage["Total" + i] = 0;	// Initiate values for total answers = correct + wrong
 			}
 		}
 	}
