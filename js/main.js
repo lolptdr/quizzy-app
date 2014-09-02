@@ -4,7 +4,6 @@ var Quizzy = (function() {
 			quizData,
 			questionUp = 0,
 			score = 0,
-			wrong = 0,
 			correct = 0,
 			highScore = 0,
 			questionCount = 1,
@@ -33,7 +32,7 @@ var Quizzy = (function() {
 							.append('<br>Question #' + questionCount + ' answered correctly of all users: ' + (correct/totalAnswered * 100).toFixed(2) + '%')
 							.append('<br>Total times this question has been answered: ' + totalAnswered);
 					} else {
-						wrong++;
+						// No need to record incorrect/wrong count
 						// Assign correct answers (notice not increment for wrong answer!)
 						correct = parseInt(localStorage[questionCount]);
 						// Assign total answered (in case they miss the first question)
