@@ -114,5 +114,4 @@ var myFancyQuizData = {
 	]
 };
 
-
 Quizzy.start('#quiz-app', myFancyQuizData);

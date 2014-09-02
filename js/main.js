@@ -6,49 +6,61 @@ var Quizzy = (function() {
 			score = 0,
 			highScore = 0,
 			questionCount = 0,
-			username = "Joe",
+			username = '',
 			user = {
 				username: highScore
 			},
 			QuizController = {
 				checkAnswer: function(input, questionModel) {
-					$('#quiz-app')
-						.append('<p><input type="button" value="Next Question" class="btn btn-md btn-primary next-question">')
-						.append('<FORM><INPUT TYPE="button" class="btn btn-lg btn-info" onClick="history.go(0)" VALUE="Start Over"></FORM>');
+					$('#quiz-app').append('<p><input type="button" value="Next Question" class="btn btn-md btn-primary next-question">');
 					if (input == questionModel.answer) {
 						// questionCount++;
 						score++;
-							$('#quiz-app')
-								.append('Correct! Current score: ' + score + ' out of ' + myFancyQuizData.questions.length);
+						localStorage[username] = score;
+						$('#quiz-app').append('Correct! Current score: ' + score + ' out of ' + myFancyQuizData.questions.length);
 					} else {
-						$('#quiz-app')
-							.append('Wrong... ' + score + ' out of ' + myFancyQuizData.questions.length);
+						$('#quiz-app').append('Wrong... ' + score + ' out of ' + myFancyQuizData.questions.length);
 					}
 					questionCount++;
+
 					$('.next-question').click(function() {
 						$('#quiz-app').empty();
 						nextQuestion('#quiz-app', myFancyQuizData);
 					});
+
 					console.log("questionCount", questionCount);
+
 					if (questionCount === myFancyQuizData.questions.length) {
+						console.log("score: ", score);
+						if (score === undefined) { score = 0; }
+						// Confirm if current score is higher than player's high score
 						if (score > localStorage[username]){
-							localStorage[username]=score;
+							localStorage[username] = score;
 						}
 						console.log("LS check", localStorage[username]);
 						$('#quiz-app')
 							.empty()
 							.append('<h1>Game over. Your score is ' + score + ' out of ' + questionCount + '.</h1>')
 							.append('<h2>' + username + '\'s high score: ' + localStorage[username] + '</h2>')
-							.append('<FORM><INPUT TYPE="button" class="btn btn-xs" onClick="history.go(0)" VALUE="Start Over"></FORM>');
+							// .append('<input type="button" name="reloadjs" value="Start New Game" onClick="LoadMyJs(\'main.js\')">');
+							.append('<FORM><INPUT TYPE="button" class="btn btn-lg btn-info" onClick=location.reload() VALUE="Start Over"></FORM>');
 					}
-				},
-				lookupUser: function(){
-					$('#quiz-app')
-						.empty()
-						.append('<h1 class="quiz-title">' + myFancyQuizData.quizTitle + '</h1>')
-						.append('<h2 class="user-score">' + username + '\'s high score: ' + highScore +'</h2>');
 				}
 			};
+
+	// event listeners
+
+	$(document).on('click', '.login-submit-button',function(e) {
+		e.preventDefault();
+		username = $('.login-submit').val();
+		$('.login-submit').val(''); //clear the field with '' but unnecessary moving to next view
+		console.log("explanation",username);
+		if (!localStorage[username]) {
+			localStorage[username] = score;
+		}
+		$('#quiz-app').empty();
+		startApplication('#quiz-app', quizData);
+	});
 
 	function QuestionModel(questionData) {
 		this.question = questionData.question;
@@ -58,10 +70,15 @@ var Quizzy = (function() {
 		this.view = new QuestionView(this);
 	}
 
-	// function ScoreModel(scoreData) {
-	// 	this.score 			= scoreData.correct;
-	// 	this.totalScore = myFancyQuizData.questions.length;
-	// }
+	function LoginView() {
+		var me = this;
+		this.template = $('#template-login').html();
+
+		var preppedTemplate = _.template(this.template);
+		var compiledHtml = preppedTemplate();
+
+		$quizContainer.append(compiledHtml);
+	}
 
 	function QuestionView(questionModel) {
 		var me     = this;
@@ -85,21 +102,15 @@ var Quizzy = (function() {
 		$quizContainer.append($view);
 	}
 
-	function LoginModel(loginData) {
-		this.username = username
+
+	function startLogin(selector, myFancyQuizData) {
+		quizData = myFancyQuizData;
+		$quizContainer = $(selector);
+		$quizContainer.append('<h1 class="quiz-title">' + quizData.quizTitle + '</h1>Presented by Joseph Tingsanchali');
+
+		LoginView();
 	}
 
-	function LoginView(loginModel) {
-		var me = this;
-		this.model = loginModel;
-		this.template = $('template-login').html();
-
-		var preppedTemplate = _.template(this.template);
-		var compiledHtml = preppedTemplate({
-			// username: 
-		});
-
-	}
 
 	function startApplication(selector, quizData) {
 		$quizContainer = $(selector);
@@ -126,15 +137,7 @@ var Quizzy = (function() {
 	}
 
 	return {
-		start: startApplication
+		start: startLogin
 	};
-
-	function LoadMyJs(scriptName) {
-   var docHeadObj = document.getElementsByTagName("head")[0];
-   var dynamicScript = document.createElement("script");
-   dynamicScript.type = "text/javascript";
-   dynamicScript.src = scriptName;
-   docHeadObj.appendChild(newScript);
-	}
 
 })();
