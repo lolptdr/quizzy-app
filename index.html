@@ -11,17 +11,32 @@
 	</head>
 	<body class="background-image">
 		<div class="container">
-			
-			<!-- Load Login Template in .container2 -->
-			<div class="container2">
-			
+
 			<div class="row" id="quiz-app">
 			</div>
 
 			<script type="text/template" id="template-login">
 				<form name="input" action="" method="get">
 					<h3 class="userfield"><strong>Username: </strong></h3><input event class="login-submit" type="text" name="user" >
-					<input type="submit" class="login-submit-button" id="result">
+					<input type="submit" class="btn btn-md btn-primary login-submit-button" id="result">
+				</form>
+				<br>
+				<button type="button" class="btn btn-md btn-info custom-question">Create Custom Quiz Questions</button>
+			</script>
+
+			<script type="text/template" id="template-create-question">
+				<form name="input" action="" method="get">
+					<h2 class="create-question-instruction">Type your question and choices. Then select the answer as the choice and click Submit.</h2>
+					<div class="create-question-grid"
+						<span class="question-field"><strong>Question: </strong></span><input event class="choice-submit question-submit" type="text">
+						<br>
+						<span class="choice-field"><strong>A choice: </strong></span><input event class="choice-submit a-choice" type="text"><br>
+						<span class="choice-field"><strong>B choice: </strong></span><input event class="choice-submit b-choice" type="text"><br>
+						<span class="choice-field"><strong>C choice: </strong></span><input event class="choice-submit c-choice" type="text"><br>
+						<span class="choice-field"><strong>D choice: </strong></span><input event class="choice-submit d-choice" type="text">
+						<br>
+						<input type="submit" class="btn btn-md btn-primary new-question-submit" id="new-question-result">
+					</div>
 				</form>
 			</script>
 			
@@ -50,7 +65,6 @@
 			<!-- Begin Quiz Game in quizData.js file -->
 			<script src="js/quizData.js"></script>
 			<script src="js/bootstrap.min.js"></script>
-			</div>
 		</div>
 	</body>
 </html>

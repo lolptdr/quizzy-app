@@ -17,6 +17,7 @@ var Quizzy = (function() {
 				checkAnswer: function(input, questionModel) {
 					$('#quiz-app').append('<p><input type="button" value="Next Question" class="btn btn-md btn-primary next-question">');
 					if (input == questionModel.answer) {
+						console.log("input", input);
 						// Assign correct answers
 						correct = parseInt(localStorage[questionCount]) + 1;
 						localStorage[questionCount] = correct;
@@ -82,6 +83,12 @@ var Quizzy = (function() {
 		startApplication('#quiz-app', quizData);
 	});
 
+	$(document).on('click', '.custom-question', function(e) {
+		e.preventDefault();
+		$('#quiz-app').empty();
+		createQuestion('#quiz-app', quizData);
+	});
+
 	// Models
 
 	function QuestionModel(questionData) {
@@ -97,6 +104,16 @@ var Quizzy = (function() {
 	function LoginView() {
 		var me = this;
 		this.template = $('#template-login').html();
+
+		var preppedTemplate = _.template(this.template);
+		var compiledHtml = preppedTemplate();
+
+		$quizContainer.append(compiledHtml);
+	}
+
+	function CreateQuestionView() {
+		var me = this;
+		this.template = $('#template-create-question').html();
 
 		var preppedTemplate = _.template(this.template);
 		var compiledHtml = preppedTemplate();
@@ -144,7 +161,6 @@ var Quizzy = (function() {
 		}
 	}
 
-
 	function startApplication(selector, quizData) {
 		$quizContainer = $(selector);
 		var playerHighScore = localStorage[username];
@@ -172,5 +188,14 @@ var Quizzy = (function() {
 	return {
 		start: startLogin
 	};
+
+	function createQuestion(selector, quizData){
+		$quizContainer = $(selector);
+
+		$quizContainer.append('<h1 class="quiz-title">' + quizData.quizTitle + '</h1>')
+			.append();
+
+			CreateQuestionView();
+	}
 
 })();

@@ -12,6 +12,7 @@ var myFancyQuizData = {
 				"1890s"
 			]
 		},
+		// if (choiceIndex == answer)
 		{
 			question: "Which command will remove recursively and forcefully all folders of root?",
 			answer: "rm -rf /",
