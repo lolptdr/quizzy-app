@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Jojo's Quiz App</title>
+		<!-- Also look at this example: http://codereview.stackexchange.com/questions/40032/javascript-quiz-app -->
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+		<script src="http://underscorejs.org/underscore-min.js"></script>
+		<link href="css/styles.css" rel="stylesheet">
+		<script src="js/main.js"></script>
+	</head>
+	<body class="background-image">
+		<div class="container">
+
+			<div class="row" id="quiz-app">
+			</div>
+
+			<script type="text/template" id="template-login">
+				<form name="input" action="" method="get">
+					<h3 class="userfield"><strong>Username: </strong></h3><input event class="login-submit" type="text" name="user" >
+					<input type="submit" class="btn btn-md btn-primary login-submit-button" id="result">
+				</form>
+				<br>
+				<button type="button" class="btn btn-md btn-info custom-question">Create Custom Quiz Questions</button>
+			</script>
+
+			<script type="text/template" id="template-create-question">
+				<form name="input" action="" method="get">
+					<h2 class="create-question-instruction">Type your question and choices. Then select the answer as the choice and click Submit.</h2>
+					<div class="create-question-grid"
+						<span class="question-field"><strong>Question: </strong></span><input event class="choice-submit question-submit" type="text">
+						<br>
+						<span class="choice-field"><strong>A choice: </strong></span><input event class="choice-submit a-choice" type="text"><br>
+						<span class="choice-field"><strong>B choice: </strong></span><input event class="choice-submit b-choice" type="text"><br>
+						<span class="choice-field"><strong>C choice: </strong></span><input event class="choice-submit c-choice" type="text"><br>
+						<span class="choice-field"><strong>D choice: </strong></span><input event class="choice-submit d-choice" type="text">
+						<br>
+						<input type="submit" class="btn btn-md btn-primary new-question-submit" id="new-question-result">
+					</div>
+				</form>
+			</script>
+			
+			
+
+			<script type="text/template" id="template-question">
+				<div class="question-list">
+					<div>
+						<h3><%= question %></h3>
+					</div>
+					<div class="radio-buttons">
+						<br>
+						<% for (var i in choices) { %>
+								<h4><input type="radio" name="<%= name %>" value="<%= choices[i] %>"><%= " " + choices[i] %></h4>
+								<% if (i !== 0 || i !== choices.length) { %>
+									<br>
+								<% } %>
+					<% } %>
+					</div>
+					<br>
+					<button type="submit" class="btn btn-lg btn-success submit-button" onclick="this.disabled=true;">Submit</button>
+				</div>
+			</script>
+			<br>
+
+			<!-- Begin Quiz Game in quizData.js file -->
+			<script src="js/quizData.js"></script>
+			<script src="js/bootstrap.min.js"></script>
+		</div>
+	</body>
+</html>
