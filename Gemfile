@@ -6,6 +6,5 @@ gem "unicorn"
 gem "rack-contrib"
 
 group :development do
-  gem "heroku"
   gem "foreman"
 end
